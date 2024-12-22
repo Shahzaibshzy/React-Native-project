@@ -29,5 +29,63 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Error fetching users", error });
   }
 });
+// GET: Get a User by ID
+router.get("/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const user = await User.findOne({ id });
+    if (!user) {
+      return res.status(404).json({ message: "Player not found" });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching player", error });
+  }
+});
+
+// POST: Add a new User
+router.post("/", async (req, res) => {
+  try {
+    const user = new User(req.body);
+    await user.save();
+    res.status(201).json({
+      message: "Player created successfully",
+      player,
+    });
+  } catch (error) {
+    res.status(400).json({ message: "Error creating player", error });
+  }
+});
+
+// PUT: Update an existing player
+router.put("/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const user = await User.findOne({ id });
+    if (!user) {
+      return res.status(404).json({ message: "Player not found" });
+    }
+
+    Object.assign(user, req.body);
+    await user.save();
+    res.status(200).json({ message: "Player updated successfully", player });
+  } catch (error) {
+    res.status(400).json({ message: "Error updating player", error });
+  }
+});
+
+// DELETE: Remove a player
+router.delete("/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const user = await User.findOneAndDelete({ id });
+    if (!user) {
+      return res.status(404).json({ message: "Player not found" });
+    }
+    res.status(200).json({ message: "Player deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting player", error });
+  }
+});
 
 module.exports = router;
