@@ -4,9 +4,9 @@ import FriendListScreen from "./components/FriendListScreen";
 
 const App = () => {
   return (
-    <View>
+ 
       <FriendListScreen />
-    </View>
+
   );
 };
 
