@@ -3279,11 +3279,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\zk\\Downloads\\Compressed\\react-native\\serverDotNet\\serverDotNet.csproj",
+      "projectUniqueName": "C:\\Users\\zk\\Desktop\\react-native-project\\serverDotNet\\serverDotNet.csproj",
       "projectName": "serverDotNet",
-      "projectPath": "C:\\Users\\zk\\Downloads\\Compressed\\react-native\\serverDotNet\\serverDotNet.csproj",
+      "projectPath": "C:\\Users\\zk\\Desktop\\react-native-project\\serverDotNet\\serverDotNet.csproj",
       "packagesPath": "C:\\Users\\zk\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\zk\\Downloads\\Compressed\\react-native\\serverDotNet\\obj\\",
+      "outputPath": "C:\\Users\\zk\\Desktop\\react-native-project\\serverDotNet\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
