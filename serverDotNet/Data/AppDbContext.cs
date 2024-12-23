@@ -7,14 +7,17 @@ namespace serverDotNet.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<Models.UsersModel> Users { get; set; }
+        public DbSet<UsersModel> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configure the seeding of data
 
+            modelBuilder.Entity<UsersModel>()
+                .Property(u => u.Id)
+                .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Models.UsersModel>()
+            modelBuilder.Entity<UsersModel>()
                            .Property(u => u.Sports)
                            .HasConversion(
                                v => string.Join(',', v),   // Convert List<string> to string for storage
@@ -22,8 +25,8 @@ namespace serverDotNet.Data
                            );
 
 
-            modelBuilder.Entity<Models.UsersModel>().HasData(
-                new Models.UsersModel
+            modelBuilder.Entity<UsersModel>().HasData(
+                new UsersModel
                 {
                     Id = 1,
                     Name = "John Parker",
@@ -33,7 +36,7 @@ namespace serverDotNet.Data
                     Sports = new List<string> { "Football", "Baseball", "Basketball", "Soccer" },
                     ImageUrl = "https://bootdey.com/img/Content/avatar/avatar1.png"
                 }
-                
+
             );
         }
     }

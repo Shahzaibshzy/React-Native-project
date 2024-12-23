@@ -101,33 +101,75 @@ public class Users : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<UsersModel>> PostPlayer(serverDotNet.Models.UsersModel user)
+    public async Task<ActionResult<UsersModel>> PostUser(UsersModel user)
     {
+        // Get the last user from the database by Id in descending order
+        var lastUser = await _context.Users.OrderByDescending(u => u.Id).FirstOrDefaultAsync();
+        user.Id = lastUser?.Id + 1 ?? 1;  // Set ID to lastId + 1, or 1 if no users exist
+
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetPlayer", new { id = user.Id }, user);
+        // Return the created user
+        return CreatedAtAction("GetUser", new { id = user.Id }, user);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutPlayer(int id, UsersModel user)
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> PutUser(int id, [FromBody] UsersModel user)
     {
+        // Check if the user ID in the route matches the ID in the URL parameter.
         if (id != user.Id)
         {
-            return BadRequest();
+            return BadRequest("User ID in the URL does not match the ID in the body.");
         }
 
-        _context.Entry(user).State = EntityState.Modified;
+        // Check if the model is valid according to any validation annotations.
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        // Check if the user exists in the database.
+        var existingUser = await _context.Users.FindAsync(id);
+        if (existingUser == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        // Update only the fields that are provided in the request body.
+        if (!string.IsNullOrEmpty(user.Name))
+            existingUser.Name = user.Name;
+
+        if (!string.IsNullOrEmpty(user.Country))
+            existingUser.Country = user.Country;
+
+        if (user.Age != null)
+            existingUser.Age = user.Age;
+
+        if (user.Rating != null)
+            existingUser.Rating = user.Rating;
+
+        if (user.Sports != null && user.Sports.Any())
+            existingUser.Sports = user.Sports;
+
+        if (!string.IsNullOrEmpty(user.ImageUrl))
+            existingUser.ImageUrl = user.ImageUrl;
+
+        // Ensure the context knows the entity is modified.
+        _context.Entry(existingUser).State = EntityState.Modified;
 
         try
         {
+            // Attempt to save changes to the database.
             await _context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!PlayerExists(id))
+            // Handle concurrency issues if any.
+            if (!UserExists(id))
             {
-                return NotFound();
+                return NotFound("User not found.");
             }
             else
             {
@@ -135,11 +177,13 @@ public class Users : ControllerBase
             }
         }
 
+        // Return a no-content status if the update was successful.
         return NoContent();
     }
 
+
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePlayer(int id)
+    public async Task<IActionResult> DeleteUser(int id)
     {
         var user = await _context.Users.FindAsync(id);
         if (user == null)
@@ -153,7 +197,7 @@ public class Users : ControllerBase
         return NoContent();
     }
 
-    private bool PlayerExists(int id)
+    private bool UserExists(int id)
     {
         return _context.Users.Any(e => e.Id == id);
     }

@@ -13,9 +13,10 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
+    "expo": {
+      "userInterfaceStyle": "automatic"
+    },
     "ios": {
       "supportsTablet": true
     },
