@@ -3,7 +3,7 @@ import { API_BASE_URL_DOTNET, API_BASE_URL_NODE } from "@env"; // Import the env
 
 // Create an Axios instance with default settings
 const api = axios.create({
-  baseURL: API_BASE_URL_DOTNET, // Use the API base URL from the environment variable
+  baseURL: API_BASE_URL_NODE, // Use the API base URL from the environment variable
 });
 
 // Function to fetch friends

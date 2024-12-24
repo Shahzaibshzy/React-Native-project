@@ -115,15 +115,13 @@ public class Users : ControllerBase
     }
 
 
-    [HttpPatch("{id}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> PutUser(int id, [FromBody] UsersModel user)
     {
+        Console.WriteLine("User ID in the route: " + id);
+        Console.WriteLine("User ID in the body: " + user.Id);
         // Check if the user ID in the route matches the ID in the URL parameter.
-        if (id != user.Id)
-        {
-            return BadRequest("User ID in the URL does not match the ID in the body.");
-        }
-
+        
         // Check if the model is valid according to any validation annotations.
         if (!ModelState.IsValid)
         {
