@@ -5,6 +5,9 @@ using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.Configure<CorsSettings>(builder.Configuration.GetSection("CorsSettings"));
 
 builder.Services.AddCors(options =>

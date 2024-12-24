@@ -1,14 +1,40 @@
-const mongoose = require("mongoose");
+const User = require("./userSchema");
 
-const userSchema = new mongoose.Schema({
-  id: { type: Number, unique: true, required: false },
-  name: { type: String, required: true },
-  country: { type: String, required: true },
-  age: { type: String, required: true },
-  rating: { type: Number, required: true },
-  sports: { type: [String], required: true },
-  imageUrl: { type: String, required: true },
-});
+// Repository functions for user-related database operations
+const userRepository = {
+  bulkWriteUsers: async (bulkOps) => {
+    return await User.bulkWrite(bulkOps);
+  },
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+  findAllUsers: async () => {
+    return await User.find();
+  },
+
+  findUserById: async (id) => {
+    return await User.findOne({ id });
+  },
+
+  findLastUser: async () => {
+    return await User.findOne().sort({ id: -1 });
+  },
+
+  createUser: async (userData) => {
+    const user = new User(userData);
+    return await user.save();
+  },
+
+  updateUserById: async (id, updateData) => {
+    const user = await User.findOne({ id });
+    if (user) {
+      Object.assign(user, updateData);
+      return await user.save();
+    }
+    return null;
+  },
+
+  deleteUserById: async (id) => {
+    return await User.findOneAndDelete({ id });
+  },
+};
+
+module.exports = userRepository;
